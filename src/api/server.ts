@@ -7,8 +7,8 @@
 // same with using the glitch url
 
  
-
-let token = '30fed3a1a5522598552e18b9f2a1a1a7b13177d531182211'
+//find a way to get the current user token
+let token = '100b7c26a8725b54c6ef31436b8cdd59ea699705f9e88652'
 
 export const server_calls = {
     get: async () => {
@@ -16,7 +16,6 @@ export const server_calls = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
                 'x-access-token': `Bearer ${token}`
             }
         });
@@ -25,9 +24,55 @@ export const server_calls = {
             throw new Error('Failed to fetch data from server')
         }
 
+        return await response.json()//read more about this
+    },
+
+    create: async (data: any={}) => {
+        const response = await fetch(`https://kind-bumpy-stork.glitch.me/api/contacts`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': `Bearer ${token}`
+            },
+            body: JSON.stringify(data)//read more about this
+    });
+
+        if (!response.ok){
+            throw new Error('Failed to create new data on the server')
+        }
+
+        return await response.json()
+    },
+
+    update: async (id: string, data:any={}) => {
+        const response = await fetch(`https://kind-bumpy-stork.glitch.me/api/contacts/${id}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+    });
+        if (!response.ok){
+            throw new Error('Failed to update data on server')
+        }
+
         return await response.json()
     },
 
 
-// TODO: finish server calls
+    delete: async (id: string) => {
+        const response = await fetch(`https://kind-bumpy-stork.glitch.me/api/contacts/${id}`,{
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': `Bearer ${token}`
+            },
+    });
+        if (!response.ok){
+            throw new Error('Failed to delete data on server')
+        }
+
+        return;
+    },
 }
